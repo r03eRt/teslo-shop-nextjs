@@ -15,6 +15,7 @@ const Home: NextPage = () => {
       <ProductList 
         products={ initialData.products as any }
         />
+        
     </ShopLayout>
   )
 }
