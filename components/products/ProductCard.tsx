@@ -1,4 +1,5 @@
 import { Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material';
+import NextLink from 'next/link'
 import React, { FC, useMemo, useState } from 'react'
 import { IProduct } from '../../interfaces'
 
@@ -25,14 +26,18 @@ export const ProductCard: FC<Props> = ({ product }) => {
             onMouseLeave={ () => setIsHovered(false) }
         >
             <Card>
-                <CardActionArea>
-                <CardMedia
-                    className='fadeIn'
-                    component='img'
-                    image={ productImage }
-                    alt={ product.title } 
-                    onLoad={() => console.log('Loaded image')} />                
-                </CardActionArea>
+                {/** Ponemos prefetch a false para que no precarge los 5 productos */}
+                <NextLink href='/product/slug' passHref prefetch={ false }>
+                    <CardActionArea>
+                        <CardMedia
+                            className='fadeIn'
+                            component='img'
+                            image={ productImage }
+                            alt={ product.title } 
+                            onLoad={() => console.log('Loaded image')} />                
+                    </CardActionArea>
+                </NextLink>
+                
             </Card>
 
             <Box sx={{ mt: 1 }} className='fadeIn'>
