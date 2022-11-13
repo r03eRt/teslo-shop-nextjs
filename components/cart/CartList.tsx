@@ -2,6 +2,7 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from "
 import { initialData } from "../../database/products"
 import NextLink from 'next/link'
 import { ItemCounter } from "../ui"
+import { FC } from "react"
 
 const productsInCart = [
     initialData.products[0],
@@ -9,7 +10,11 @@ const productsInCart = [
     initialData.products[2]
 ]
 
-export const CartList = () => {
+interface Props {
+    editable?: boolean;
+}
+
+export const CartList: FC<Props> = ({ editable = false }) => {
   return (
     <>
         {
@@ -32,12 +37,23 @@ export const CartList = () => {
                         <Box display='flex' flexDirection='column'>
                             <Typography variant='body1'>{ product.title }</Typography>
                             <Typography variant='body1'>Talla: <strong>M</strong></Typography>
-                            <ItemCounter/>
+                            
+                            {
+                                editable
+                                ? <ItemCounter/>
+                                : <Typography variant="h4">1 Item</Typography>
+                            }
+                            
                         </Box>
                     </Grid>
                     <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
-                        <Typography variant="subititle1">{ `$${ product.price }` }</Typography>
-                        <Button variant="text" color="secondary">Remover</Button>
+                        <Typography variant="subtitle1">{ `$${ product.price }` }</Typography>
+
+                        {
+                            editable && (
+                                <Button variant="text" color="secondary">Remover</Button>
+                            )                            
+                        }                        
                     </Grid>
                 </Grid>
 
