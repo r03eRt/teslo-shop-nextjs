@@ -4,13 +4,13 @@ export interface IProduct {
     images: string[];
     inStock: number;
     price: number;
-    sizes: ISizes[];
+    sizes: ISize[];
     slug: string;
     tags: string[];
     title: string;
-    type: ITypes;
+    type: IType;
     gender: 'men'|'women'|'kid'|'unisex';
 }
 
-export type ISizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
-export type ITypes = 'shits'|'pants'|'hoodies'|'hats';
+export type ISize = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
+export type IType = 'shits'|'pants'|'hoodies'|'hats';
