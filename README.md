@@ -4,11 +4,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -32,3 +28,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+#Nextjs 
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+
+1.- Se instala docker 
+
+2.- se instala mongo compass
+
+3.- Se hace la configuración del fichero docker-compose.yaml
+
+4.- Se ejecuta docker en local
+
+```
+docker-compose up -d
+```
+
+5.- Url local de MongoDB
+```
+mongodb://localhost:27017/teslodb
+```
