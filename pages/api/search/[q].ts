@@ -40,8 +40,8 @@ const searchProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
             $search: q
         }
      })
-     .select('title images price inStock slug - _id')
-     .lean()
+     .select('title images price inStock slug -_id')
+     .lean();
 
     return res.status(200).json(products);
 }
