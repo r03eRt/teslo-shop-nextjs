@@ -37,7 +37,7 @@ const searchProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
         }
      })
      .select('title images price inStock slug -_id')
-     //.lean();
+     .lean();
 
     return res.status(200).json(products);
 }
