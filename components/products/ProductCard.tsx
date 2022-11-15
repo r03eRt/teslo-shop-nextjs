@@ -29,7 +29,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         >
             <Card>
                 {/** Ponemos prefetch a false para que no precarge los 5 productos */}
-                <NextLink href='/product/slug' passHref prefetch={ false }>
+                <NextLink href={`/product/${product.slug}`} passHref prefetch={ false }>
                     <CardActionArea>
                         <CardMedia
                             className='fadeIn'
