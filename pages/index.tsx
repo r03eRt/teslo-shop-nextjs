@@ -2,6 +2,7 @@ import { Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material
 import type { NextPage } from 'next'
 import { ShopLayout } from '../components/layouts'
 import { ProductList } from '../components/products'
+import { FullScreenLoading } from '../components/ui'
 import { initialData } from '../database/products'
 import { useProducts } from '../hooks'
 import { IProduct } from '../interfaces'
@@ -18,7 +19,7 @@ const HomePage: NextPage = () => {
       <Typography variant='h2' sx={{ mb: 1 }}>Todos los productos</Typography>
       {
         isLoading
-        ? <h1>Cargando...</h1>
+        ? <FullScreenLoading></FullScreenLoading>
         : <ProductList products={ products } />
       }        
     </ShopLayout>
