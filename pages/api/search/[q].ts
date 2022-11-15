@@ -23,8 +23,6 @@ const searchProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
     
     let { q = '' } = req.query;
 
-    console.log(q.length);
-
     if(q.length === 0) {
         return res.status(400).json({
             message: 'Debe de especificar el query de búsqueda'

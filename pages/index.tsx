@@ -6,18 +6,31 @@ import { initialData } from '../database/products'
 import { IProduct } from '../interfaces'
 
 
-const Home: NextPage = () => {
+// con fetcher lo que hacemos es cachear los datos iniciales
+import useSWR from "swr"
+const fetcher = (...args: [key: string]) => fetch(...args).then(res => res.json())
+
+
+const HomePage: NextPage = () => {
+
+  const { data, error } = useSWR("/api/products", fetcher)
+
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+
+  console.log(data)
+
   return (
     <ShopLayout title={'Teslo-shop - Home'} pageDescription={ 'Encuentra los mejores productos tesla aqui'}>
       <Typography variant='h1' component='h1'>Tienda</Typography>
       <Typography variant='h2' sx={{ mb: 1 }}>Todos los productos</Typography>
 
       <ProductList 
-        products={ initialData.products as any }
+        products={ data }
         />
         
     </ShopLayout>
   )
 }
 
-export default Home
+export default HomePage
