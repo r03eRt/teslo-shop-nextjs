@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { db } from '../../../database'
+import { db, SHOP_CONSTANTS } from '../../../database'
 import { IProduct } from '../../../interfaces'
 import { Product } from '../../../models'
 
@@ -21,9 +21,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 const getProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.connect();
 
+    //Por defecto genero igual a all, inicilizamos filtro, si viene enla url un genero lo aplicamos a la query
+    // tambien comprobamos si viene en nuestra lista de posibles generos que tenemos en una constante
+    const { gender = 'all' } = req.query;
+    let condition = {};
+    if(gender !== 'all' && SHOP_CONSTANTS.validGenders.includes(`${gender}`)) {
+        condition = { gender: gender }
+    }
+
     const products = await Product
-                            .find() // query de productos
-                            .select('title images price inStock slug - _id') // Para seleccionar que campos nos devuelve y reducir tamaño de peticion
+                            .find(condition) // query de productos
+                            .select('title images price inStock slug') // Para seleccionar que campos nos devuelve y reducir tamaño de peticion
                             .lean() //.lean()
 
     await db.disconnect();
