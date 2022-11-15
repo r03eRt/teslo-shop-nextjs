@@ -1,21 +1,37 @@
-import { Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import { ShopLayout } from '../../components/layouts'
 import { ProductList } from '../../components/products'
 
 interface Props {
     products: IProduct[];
+    foundProducts: boolean;
+    query: string;
 }
 
 
 // Siempre que usamos SSR hay que vovler a rellenar la paginas con los datos que nos vendran
-const SearchPage: NextPage<Props> = ({ products }) => {
+const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 
 
   return (
     <ShopLayout title={'Teslo-shop - Search'} pageDescription={ 'Encuentra los mejores productos tesla aqui'}>
       <Typography variant='h1' component='h1'>Buscar producto</Typography>
-      <Typography variant='h2' sx={{ mb: 1 }}>ABC --- 123</Typography>
+      
+
+        {
+            foundProducts 
+            ? <Typography variant='h2' sx={{ mb: 1 }}>Término: { query }</Typography>
+            : (<>
+                <Box display={'flex'} flexDirection='row'>
+                    <Typography variant='h2' sx={{ mb: 1 }}>No encontramos ningún producto</Typography>
+                    <Typography variant='h2' sx={{ ml: 1 }} color="secondery">{ query}</Typography>
+                </Box>
+                
+            </>)
+            
+        }
+
       <ProductList products={ products } />      
     </ShopLayout>
   )
@@ -46,11 +62,18 @@ export const getServerSideProps: GetServerSideProps = async ({ params })=> {
     
     let products = await dbProducts.getProductByTerm(query);
 
-    // TODO: retornar otros productos
+    // TODO: retornar otros productos cuando no se encuentra el término
+    const foundProducts = products.length > 0;
+    if(!foundProducts) {
+        products = await dbProducts.getAllProducts();
+    }
+    
 
     return {
         props: {
-            products: products
+            products: products,
+            foundProducts,
+            query
         }
     }
 }
