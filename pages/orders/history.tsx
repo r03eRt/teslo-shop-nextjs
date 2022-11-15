@@ -1,6 +1,6 @@
 import { Chip, Grid, Link, Typography } from '@mui/material'
 import { ShopLayout } from '../../components/layouts'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 import NextLink from 'next/link'
 
 const columns: GridColDef[] = [

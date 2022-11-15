@@ -68,6 +68,8 @@ export const ProductPage: FC<Props> = ({ product }) => {
   )
 }
 
+
+/** Server Side rendering FORMA1 
 // Con getServerSideProps cada vez que el servidor entre en esta url va a precargar por detras la llamada, no es optimo para cache y temas asi,
 // pero es la configuracion mas sencilla de nextjs
 // You should use getServerSideProps when:
@@ -95,6 +97,73 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 }
+*/
+
+
+
+
+/** 2a Forma generando ficheros estáticos de todos los productos antes */
+// snippet nextgetStaticPaths
+// You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
+import { GetStaticPaths } from 'next'
+import { dbProducts } from '../../database';
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  // traemos todos los posibles slugs
+  const productSlugs = await dbProducts.getAllProductsSlugs();
+
+  return {
+    paths: productSlugs.map(({slug}) => ({
+      params: {
+        slug
+      }
+    })),
+    //estructura necesaria 
+    //paths:    
+    // [
+    //   {
+    //     params: {
+          
+    //     }
+    //   }
+    // ],
+    fallback: "blocking"
+  }
+}
+
+// obtener los datos cuando tengo nextgetStaticPaths
+// You should use getStaticProps when:
+//- The data required to render the page is available at build time ahead of a user’s request.
+//- The data comes from a headless CMS.
+//- The data can be publicly cached (not user-specific).
+//- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
+import { GetStaticProps } from 'next'
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug = ''} = params as { slug: string };
+  const product = await dbProducts.getProductBySlug(slug)
+
+  // si no existe el producto redirigimos
+  if(!product) {
+    return {
+      redirect: '/',
+      permanent: false // el dia de mañana puede existir el producto que hoy no está
+    }
+  }
+  return {
+    props: {
+      product: product
+    },
+    revalidate: 60 * 60 * 24 // 60 sec * 60 min * 24horas  cada 24h se vuelve a generar los estáticos
+  }
+}
+
+
+
+
+/** */
+
+
 
 
 export default ProductPage;
