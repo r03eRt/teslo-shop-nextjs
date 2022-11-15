@@ -1,22 +1,27 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { FC } from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
 import { initialData } from '../../database/products';
 import { useProducts } from '../../hooks';
+import { IProduct } from '../../interfaces';
 
 //const product = initialData.products[0];
 
+interface Props {
+  product: IProduct
+}
 
-export const ProductPage = () => {
+
+export const ProductPage: FC<Props> = ({ product }) => {
 
   //const router = useRouter();
   // Aqui se puede obtener los datos usando un useEffect, un fetch, axios o como este caso el hook personalizado que hemos hecho con SWR
   //const {products: product, isLoading } = useProducts(`/products/${router.query.slug}`);
 
-  
+
 
   return (
    <ShopLayout title={ product.title } pageDescription={ product.description }>
@@ -62,5 +67,34 @@ export const ProductPage = () => {
    </ShopLayout>
   )
 }
+
+// Con getServerSideProps cada vez que el servidor entre en esta url va a precargar por detras la llamada, no es optimo para cache y temas asi,
+// pero es la configuracion mas sencilla de nextjs
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps } from 'next'
+import { dbProducts } from '../../database';
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  console.log('Precargando...');
+  const { slug = '' } = params as { slug: string };
+  // Esta funcion la hemos sacado fuera, pero aqui relamente con axios haríamos la llamda a la api para obtener los datos que necesitasemos
+  const product = await dbProducts.getProductBySlug(slug);
+
+  // en caso de fallo redirijo a donde quiera
+  if(!product) {
+    return {
+      destination: '/',
+      permanent: false
+    }
+  }
+
+  return {
+    props: {
+      product: product
+    }
+  }
+}
+
 
 export default ProductPage;
