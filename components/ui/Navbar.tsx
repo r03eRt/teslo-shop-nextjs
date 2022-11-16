@@ -4,8 +4,13 @@ import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-
 import { useRouter } from 'next/router';
 import { UiContext } from '../../context/ui';
 import { useContext, useState } from 'react';
+import { CartContext } from '../../context/cart';
 
 export const Navbar = () => {
+
+
+    //obtenermos datos del cartContext
+    const { numberOfItems } = useContext(CartContext);    
 
     // para saber en que ruta estoy
     const {asPath, push} = useRouter();
@@ -100,7 +105,7 @@ export const Navbar = () => {
             <NextLink href='/cart' passHref>
                 <Link>
                     <IconButton>
-                            <Badge badgeContent={ 2 } color='secondary'>
+                            <Badge badgeContent={ numberOfItems } color='secondary'>
                                 <ShoppingCartOutlined/>
                             </Badge>
                     </IconButton>

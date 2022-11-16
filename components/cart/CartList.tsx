@@ -5,6 +5,7 @@ import { ItemCounter } from "../ui"
 import { FC, useContext } from "react"
 import { CartContext } from "../../context/cart"
 import { ICartProduct } from "../../interfaces"
+import { currency } from "../../utils"
 
 // const productsInCart = [
 //     initialData.products[0],
@@ -58,7 +59,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                         </Box>
                     </Grid>
                     <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
-                        <Typography variant="subtitle1">{ `$${ product.price }` }</Typography>
+                        <Typography variant="subtitle1">{ `${ currency.format(product.price) }` }</Typography>
 
                         {
                             editable && (
