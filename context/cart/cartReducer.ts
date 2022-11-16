@@ -1,4 +1,4 @@
-import { CartState } from ".";
+import { CartState } from "./";
 import { ICartProduct } from "../../interfaces";
 
 
@@ -7,7 +7,7 @@ type CartActionType =
 | { type: '[Cart] - Add Product', payload: ICartProduct }
 
 
-export const CartReducer = (state: CartState, action: CartActionType): CartState => {
+export const cartReducer = (state: CartState, action: CartActionType): CartState => {
     switch (action.type) {
         case '[Cart] - LoadCart from storage':
             return {

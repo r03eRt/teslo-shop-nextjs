@@ -12,7 +12,7 @@ const CART_INITIAL_STATE: CartState = {
     cart: []
 }
 
-export const UiProvider:FC<CartState> = ({ children }) => {
+export const CartProvider:FC<CartState> = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
     return(
