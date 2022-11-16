@@ -7,6 +7,7 @@ import { ICartProduct } from "../../interfaces";
     //methods
     addProductToCart: (product: ICartProduct) => void;
     updateCartQuantity: (product: ICartProduct) => void;
+    removeCartProduct: (product: ICartProduct) => void;
  }
 
 

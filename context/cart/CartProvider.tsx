@@ -66,10 +66,12 @@ export const CartProvider:FC<CartState> = ({ children }) => {
         dispatch({ type: '[Cart] - Update Product in cart', payload: updatedProducts })
     }
 
-
-
     const updateCartQuantity = (product: ICartProduct) => {
         dispatch({ type: '[Cart] - Change cart quantity', payload: product})
+    }
+
+    const removeCartProduct = (product: ICartProduct) => {
+        dispatch({ type: '[Cart] - Remove product in cart', payload: product})
     }
 
     return(
@@ -78,7 +80,8 @@ export const CartProvider:FC<CartState> = ({ children }) => {
 
             //Methods
             addProductToCart,
-            updateCartQuantity
+            updateCartQuantity,
+            removeCartProduct
 
         }}>
             { children }
