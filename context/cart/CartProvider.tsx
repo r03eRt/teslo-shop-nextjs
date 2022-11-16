@@ -37,7 +37,26 @@ export const CartProvider:FC<CartState> = ({ children }) => {
     // cada vez que se actulize el carrito vamos a ejecutar esto
     useEffect(() => {
      Cookie.set('cart', JSON.stringify(state.cart))
-    }, [state.cart])
+    }, [state.cart]);
+
+
+    // cada vez que se actulize el carrito vamos a ejecutar esto
+    useEffect(() => {
+
+        const numberOfItems = state.cart.reduce( (prev, current) => current.quantity + prev, 0);
+        const subTotal = state.cart.reduce( (prev, current) => (current.price * current.quantity) + prev, 0);
+        const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
+
+        const orderSummary = {
+            numberOfItems,
+            subTotal,
+            tax: subTotal * taxRate,
+            total: subTotal * (taxRate + 1)
+        }    
+        
+    }, [state.cart]);
+
+
     
 
     //Funciones publicas  para no hacer dispatch en lso componentes de fuera
