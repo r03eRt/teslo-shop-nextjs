@@ -1,6 +1,6 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
@@ -16,8 +16,12 @@ interface Props {
 
 
 export const ProductPage: FC<Props> = ({ product }) => {
+  const router = useRouter();
 
-  //const router = useRouter();
+  // Usamos contenxt para sacar el metodo que hará un dispatch internamente para cambiar ele stado del carrito
+  const { addProductToCart } = useContext(CartContext)
+
+
   // Aqui se puede obtener los datos usando un useEffect, un fetch, axios o como este caso el hook personalizado que hemos hecho con SWR
   //const {products: product, isLoading } = useProducts(`/products/${router.query.slug}`);
 
@@ -44,7 +48,10 @@ export const ProductPage: FC<Props> = ({ product }) => {
 
 
   const onAddProduct = () => {
-    console.log({ tempCartProduct });    
+    if(!tempCartProduct.size) return;
+    // llamar la accion del context para agregar al carrito de estado el carrito actual
+    addProductToCart(tempCartProduct)
+    router.push('/cart');
   }
 
   const onUpdatedQuantity = ( newQuantity: number) => {
@@ -200,6 +207,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 import { GetStaticProps } from 'next'
 import { log } from 'console';
+import { CartContext } from '../../context/cart';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = ''} = params as { slug: string };
