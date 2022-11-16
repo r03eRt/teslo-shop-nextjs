@@ -1,12 +1,12 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
 import { initialData } from '../../database/products';
 import { useProducts } from '../../hooks';
-import { IProduct } from '../../interfaces';
+import { ICartProduct, IProduct, ISize } from '../../interfaces';
 
 //const product = initialData.products[0];
 
@@ -21,6 +21,26 @@ export const ProductPage: FC<Props> = ({ product }) => {
   // Aqui se puede obtener los datos usando un useEffect, un fetch, axios o como este caso el hook personalizado que hemos hecho con SWR
   //const {products: product, isLoading } = useProducts(`/products/${router.query.slug}`);
 
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1,
+  })
+
+
+  const selectedSize = (size: ISize) => {
+    // En las funciones con useState, tenemos acceso a los datos del state, por eso cogemos current product del state y le sumamos el nuevo dato
+    // normalmente generaíamos un nuevo dato(temCartProduct) y haríamos un dispatch para rellenar el state, con esto no hace falta.
+    setTempCartProduct( currentProduct => ({
+      ...currentProduct,
+      size: size
+    }))
+  }
 
 
   return (
@@ -42,8 +62,10 @@ export const ProductPage: FC<Props> = ({ product }) => {
               <ItemCounter/>
               {/** Size selector */}
               <SizeSelector 
-                //selectedSize={ product.sizes[2] } 
+                selectedSize={ tempCartProduct.size } 
                 sizes={ product.sizes }
+                //onSelectedSize={(size) => selectedSize(size)}
+                onSelectedSize={ selectedSize }
               />
             </Box>
 
@@ -52,7 +74,9 @@ export const ProductPage: FC<Props> = ({ product }) => {
               (product.inStock > 0 )
               ? (
               <Button color='secondary' className='circular-btn'>
-                Agregar al carrito
+                {
+                  tempCartProduct.size ? 'Agregar al carrito' : 'Seleccionar una talla' 
+                }                
               </Button>
               )
               : (
