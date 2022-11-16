@@ -1,7 +1,8 @@
-import { FC, useReducer } from 'react'
+import { FC, useEffect, useReducer } from 'react'
 import { CartContext, cartReducer } from './'
 import { ICartProduct } from '../../interfaces'
 import { ProductionQuantityLimits } from '@mui/icons-material'
+import Cookie from 'js-cookie';
 
 export interface CartState {
     cart: ICartProduct[]
@@ -14,7 +15,25 @@ const CART_INITIAL_STATE: CartState = {
 }
 
 export const CartProvider:FC<CartState> = ({ children }) => {
+
     const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
+
+
+    //lo primero que hacemos es mirar en las cookies si tenemos cosas en el carrito guardadas y las cargamos desde el localstorage al estado
+    useEffect(() => {
+        const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!): [];
+        dispatch({ type: '[Cart] - LoadCart from storage', payload: cookieProducts })
+    }, [])
+    
+
+
+
+
+    // cada vez que se actulize el carrito vamos a ejecutar esto
+    useEffect(() => {
+     Cookie.set('cart', JSON.stringify(state.cart))
+    }, [state.cart])
+    
 
     //Funciones publicas  para no hacer dispatch en lso componentes de fuera
     const addProductToCart = (product: ICartProduct) => {

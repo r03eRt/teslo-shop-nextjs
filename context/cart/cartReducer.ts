@@ -12,6 +12,7 @@ export const cartReducer = (state: CartState, action: CartActionType): CartState
         case '[Cart] - LoadCart from storage':
             return {
                 ...state,
+                cart: [...action.payload]
             }
         case '[Cart] - Update Product in cart':
             return {
