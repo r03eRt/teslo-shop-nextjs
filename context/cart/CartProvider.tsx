@@ -21,8 +21,13 @@ export const CartProvider:FC<CartState> = ({ children }) => {
 
     //lo primero que hacemos es mirar en las cookies si tenemos cosas en el carrito guardadas y las cargamos desde el localstorage al estado
     useEffect(() => {
-        const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!): [];
-        dispatch({ type: '[Cart] - LoadCart from storage', payload: cookieProducts })
+
+        try {
+            const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!): [];
+            dispatch({ type: '[Cart] - LoadCart from storage', payload: cookieProducts })
+        } catch (error) {
+            dispatch({ type: '[Cart] - LoadCart from storage', payload: [] })
+        }        
     }, [])
     
 
