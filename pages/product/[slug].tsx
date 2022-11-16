@@ -43,6 +43,21 @@ export const ProductPage: FC<Props> = ({ product }) => {
   }
 
 
+  const onAddProduct = () => {
+    console.log({ tempCartProduct });    
+  }
+
+  const onUpdatedQuantity = ( newQuantity: number) => {
+    // En las funciones con useState, tenemos acceso a los datos del state, por eso cogemos current product del state y le sumamos el nuevo dato
+    // normalmente generaíamos un nuevo dato(temCartProduct) y haríamos un dispatch para rellenar el state, con esto no hace falta.
+    setTempCartProduct( currentProduct => ({
+      ...currentProduct,
+      quantity: newQuantity
+    }))
+  }
+
+
+
   return (
    <ShopLayout title={ product.title } pageDescription={ product.description }>
       <Grid container spacing={3}>
@@ -59,7 +74,11 @@ export const ProductPage: FC<Props> = ({ product }) => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               {/** Item counter */}
-              <ItemCounter/>
+              <ItemCounter
+                currentValue={ tempCartProduct.quantity }
+                updatedQuantity={ onUpdatedQuantity }
+                maxValue={ product.inStock > 10 ? 10 : product.inStock }
+              />
               {/** Size selector */}
               <SizeSelector 
                 selectedSize={ tempCartProduct.size } 
@@ -73,7 +92,12 @@ export const ProductPage: FC<Props> = ({ product }) => {
             {
               (product.inStock > 0 )
               ? (
-              <Button color='secondary' className='circular-btn'>
+              <Button 
+                color='secondary'
+                className='circular-btn'
+                onClick={ onAddProduct}
+
+              >
                 {
                   tempCartProduct.size ? 'Agregar al carrito' : 'Seleccionar una talla' 
                 }                
@@ -175,6 +199,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The data can be publicly cached (not user-specific).
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 import { GetStaticProps } from 'next'
+import { log } from 'console';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = ''} = params as { slug: string };
