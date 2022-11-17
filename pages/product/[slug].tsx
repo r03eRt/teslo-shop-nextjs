@@ -4,7 +4,7 @@ import React, { FC, useContext, useState } from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
-import { initialData } from '../../database/products';
+import { initialData } from '../../database/seed-data';
 import { useProducts } from '../../hooks';
 import { ICartProduct, IProduct, ISize } from '../../interfaces';
 

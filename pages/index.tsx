@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import { ShopLayout } from '../components/layouts'
 import { ProductList } from '../components/products'
 import { FullScreenLoading } from '../components/ui'
-import { initialData } from '../database/products'
+import { initialData } from '../database/seed-data'
 import { useProducts } from '../hooks'
 import { IProduct } from '../interfaces'
 
