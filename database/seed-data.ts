@@ -32,7 +32,6 @@ interface SeedData {
 }
 
 
-
 export const initialData: SeedData = {
     users: [
         {
